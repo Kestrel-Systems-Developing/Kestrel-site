@@ -1,0 +1,105 @@
+/* Kestrel — layout layer. Loaded after styles.css. Palette and logo untouched. */
+.scroll-bar{position:fixed;inset:0 0 auto 0;height:3px;z-index:80;background:var(--gold);transform-origin:0 50%;transform:scaleX(0);pointer-events:none}
+.site-header{transition:box-shadow .3s}
+.site-header.is-stuck{box-shadow:0 14px 30px -20px rgba(0,0,0,.7)}
+.site-header.is-stuck .bar{height:62px}
+.bar{transition:height .3s}
+
+/* ---------- Hero: a falcon's-eye focus that follows the cursor ---------- */
+.hero{--mx:70%;--my:40%;padding-top:clamp(72px,10vw,140px)}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:
+   radial-gradient(520px circle at var(--mx) var(--my),rgba(184,156,91,.22),transparent 60%),
+   linear-gradient(rgba(184,156,91,.10) 1px,transparent 1px) 0 0/64px 64px,
+   linear-gradient(90deg,rgba(184,156,91,.10) 1px,transparent 1px) 0 0/64px 64px;
+  -webkit-mask:radial-gradient(420px circle at var(--mx) var(--my),#000,rgba(0,0,0,.18) 70%);
+  mask:radial-gradient(420px circle at var(--mx) var(--my),#000,rgba(0,0,0,.18) 70%)}
+.hero h1{font-size:clamp(2.8rem,7vw,5.6rem);letter-spacing:-.035em;line-height:1.02}
+.hero h1 em{display:block}
+.hero .lede{max-width:540px}
+.hero__grid>div:last-child{perspective:1200px}
+.mock{transform:rotateY(-9deg) rotateX(4deg);transition:transform .25s ease-out;will-change:transform}
+.mock-wrap-float{animation:float 7s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-10px)}}
+.m-bar i{transform-origin:0;animation:fill 1.6s .4s cubic-bezier(.2,.8,.2,1) both}
+@keyframes fill{from{transform:scaleX(0)}}
+.hero .btn--gold{box-shadow:0 0 0 0 rgba(184,156,91,.5);animation:pulse 3s 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 14px rgba(184,156,91,0)}100%{box-shadow:0 0 0 0 rgba(184,156,91,0)}}
+
+/* ---------- Bento: the three systems ---------- */
+.bento{grid-template-columns:1.15fr 1fr;grid-template-rows:auto auto}
+.bento>.pcard:first-child{grid-row:span 2;padding:44px;background:var(--navy);color:var(--paper);border-color:rgba(184,156,91,.5)}
+.bento>.pcard:first-child .pcard__sub,.bento>.pcard:first-child .pcard__price{color:var(--silver-2)}
+.bento>.pcard:first-child .pcard__price{border-color:rgba(255,255,255,.15)}
+.bento>.pcard:first-child .pcard__price b{color:var(--gold)}
+.bento>.pcard:first-child .pcard__icon{width:76px;height:76px;padding:14px;background:rgba(184,156,91,.12);border:1px solid rgba(184,156,91,.5)}
+.bento>.pcard:first-child h3{font-size:clamp(2rem,3.4vw,2.8rem);letter-spacing:-.02em}
+.bento>.pcard:first-child .tag{background:transparent;color:var(--paper);border-color:rgba(184,156,91,.5)}
+.bento>.pcard:first-child .btn--navy{background:var(--gold);color:var(--navy)}
+.bento>.pcard:first-child .btn--outline{border-color:var(--paper);color:var(--paper)}
+.bento>.pcard:first-child .btn--outline:hover{background:var(--paper);color:var(--navy)}
+.pcard{overflow:hidden;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.pcard::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(360px circle at var(--px,50%) var(--py,50%),rgba(184,156,91,.18),transparent 65%)}
+.pcard:hover{transform:translateY(-6px);box-shadow:0 30px 50px -30px rgba(20,27,49,.55)}
+.pcard:hover::before{opacity:1}
+.pcard__icon{transition:transform .4s}
+.pcard:hover .pcard__icon{transform:rotate(-6deg) scale(1.08)}
+
+/* ---------- Own it / let us run it: two doors, one choice ---------- */
+.split{position:relative;gap:0;border:1px solid rgba(184,156,91,.35);border-radius:16px;overflow:hidden}
+.split .card--dark{border:0;border-radius:0;transition:background .35s,flex .35s}
+.split .card--dark+.card--dark{border-left:1px solid rgba(184,156,91,.35)}
+.split .card--dark:hover{background:rgba(184,156,91,.10)}
+.split::after{content:"or";position:absolute;left:50%;top:50%;translate:-50% -50%;width:54px;height:54px;border-radius:50%;
+  display:grid;place-items:center;background:var(--gold);color:var(--navy);font-weight:700;box-shadow:0 0 0 8px var(--navy)}
+
+/* ---------- How we work: a timeline that draws itself ---------- */
+.timeline{position:relative}
+.timeline::before{content:"";position:absolute;left:0;right:0;top:28px;height:2px;background:var(--gold);
+  transform-origin:0;transform:scaleX(var(--draw,0));transition:transform 1.4s cubic-bezier(.2,.8,.2,1)}
+.timeline>.card{background:transparent;border:0;padding:64px 12px 0 0;position:relative}
+.timeline>.card::before{content:"";position:absolute;left:0;top:20px;width:18px;height:18px;background:var(--navy);
+  border:2px solid var(--gold);transform:rotate(45deg)}
+.timeline>.card .num{border:0;font-size:1.1rem;color:var(--muted);padding:0;margin-bottom:6px}
+.timeline>.card h3{font-size:1.8rem}
+
+/* ---------- Solutions marketplace ---------- */
+.filters{position:sticky;top:calc(var(--header-h) + 10px);z-index:20;width:max-content;max-width:100%;
+  padding:8px 10px;background:rgba(242,241,236,.9);backdrop-filter:blur(10px);border:1px solid var(--silver-2);border-radius:999px}
+.chip{transition:background .2s,color .2s}
+.chip:hover{background:var(--gold-5)}
+.product-tabs{display:flex;gap:8px;padding:6px;margin:0 0 40px;background:var(--navy);border-radius:16px;width:max-content;max-width:100%;overflow-x:auto}
+.product-tabs button{font:inherit;font-weight:600;color:var(--silver-2);background:transparent;border:0;border-radius:11px;padding:.8em 1.6em;cursor:pointer;transition:background .25s,color .25s}
+.product-tabs button:hover{color:var(--gold)}
+.product-tabs button[aria-selected="true"]{background:var(--gold);color:var(--navy)}
+.price-block[hidden]{display:none}
+.price-block+.price-block{margin-top:0}
+.plans{align-items:center}
+.plan{transition:transform .3s,box-shadow .3s}
+.plan:hover{transform:translateY(-4px)}
+.plan--featured{transform:scale(1.04);background:var(--navy)!important;color:var(--paper)}
+.plan--featured:hover{transform:scale(1.04) translateY(-4px)}
+.plan--featured .plan__kind,.plan--featured .price__from,.plan--featured .price__unit,.plan--featured .plan__note{color:var(--silver-2)}
+.plan--featured .price__amt{color:var(--gold)}
+.plan--featured .btn--gold:hover{background:var(--gold-2)}
+.table-wrap tbody tr{transition:background .2s}
+.table-wrap tbody tr:hover{background:var(--gold-5)}
+
+/* ---------- Motion: staggered, calm ---------- */
+.reveal{transition-duration:.8s;transition-timing-function:cubic-bezier(.2,.8,.2,1)}
+.grid>.reveal:nth-child(2),.plans>.reveal:nth-child(2){transition-delay:.12s}
+.grid>.reveal:nth-child(3),.plans>.reveal:nth-child(3){transition-delay:.24s}
+.cta h2{font-size:clamp(2.2rem,5vw,3.8rem);letter-spacing:-.03em}
+
+@media (max-width:1000px){
+  .bento{grid-template-columns:1fr}.bento>.pcard:first-child{grid-row:auto}
+  .mock{transform:none}.plan--featured,.plan--featured:hover{transform:none}
+  .timeline::before{display:none}.timeline>.card{padding-top:44px}
+  .split::after{display:none}.split .card--dark+.card--dark{border-left:0;border-top:1px solid rgba(184,156,91,.35)}
+}
+@media (max-width:620px){.filters{border-radius:20px}.product-tabs button{padding:.7em 1.1em}}
+@media (prefers-reduced-motion:reduce){
+  .mock,.mock-wrap-float,.m-bar i,.hero .btn--gold{animation:none;transform:none}
+  .timeline::before{transform:none;transition:none}.pcard:hover,.plan:hover{transform:none}
+}

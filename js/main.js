@@ -153,3 +153,78 @@
     });
   }
 })();
+
+/* ---- Creative layer: progress bar, focus spotlight, tilt, tabs, timeline ---- */
+(function () {
+  "use strict";
+  var doc = document, reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var bar = doc.createElement("div"); bar.className = "scroll-bar"; doc.body.appendChild(bar);
+  var header = doc.querySelector(".site-header");
+  var onScroll = function () {
+    var h = doc.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = "scaleX(" + (h > 0 ? scrollY / h : 0) + ")";
+    if (header) header.classList.toggle("is-stuck", scrollY > 8);
+  };
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  if (!reduce) {
+    var hero = doc.querySelector(".hero");
+    if (hero) hero.addEventListener("pointermove", function (e) {
+      var r = hero.getBoundingClientRect();
+      hero.style.setProperty("--mx", (e.clientX - r.left) + "px");
+      hero.style.setProperty("--my", (e.clientY - r.top) + "px");
+    });
+    var mock = doc.querySelector(".hero .mock");
+    if (mock) {
+      mock.parentNode.classList.add("mock-wrap-float");
+      mock.addEventListener("pointermove", function (e) {
+        var r = mock.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        mock.style.transform = "rotateY(" + (x * 14) + "deg) rotateX(" + (-y * 10) + "deg)";
+      });
+      mock.addEventListener("pointerleave", function () { mock.style.transform = ""; });
+    }
+    doc.querySelectorAll(".pcard").forEach(function (c) {
+      c.addEventListener("pointermove", function (e) {
+        var r = c.getBoundingClientRect();
+        c.style.setProperty("--px", (e.clientX - r.left) + "px");
+        c.style.setProperty("--py", (e.clientY - r.top) + "px");
+      });
+    });
+  }
+
+  /* Timeline draws when it scrolls into view */
+  var tl = doc.querySelector(".timeline");
+  if (tl && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (en, o) {
+      if (en[0].isIntersecting) { tl.style.setProperty("--draw", 1); o.disconnect(); }
+    }, { threshold: .3 }).observe(tl);
+  } else if (tl) tl.style.setProperty("--draw", 1);
+
+  /* Solutions: one product's plans at a time, deep-linkable (#lms, #qrms, #sms) */
+  var blocks = [].slice.call(doc.querySelectorAll(".price-block"));
+  if (blocks.length > 1) {
+    var names = { lms: "Kestrel LMS", qrms: "Kestrel QRMS", sms: "Kestrel SMS" };
+    var tabs = doc.createElement("div"); tabs.className = "product-tabs"; tabs.setAttribute("role", "tablist");
+    blocks.forEach(function (b) {
+      var t = doc.createElement("button"); t.type = "button"; t.setAttribute("role", "tab");
+      t.textContent = names[b.id] || b.id; t.dataset.target = b.id; tabs.appendChild(t);
+    });
+    blocks[0].parentNode.insertBefore(tabs, blocks[0]);
+    var show = function (id, scroll) {
+      if (!names[id]) id = "lms";
+      blocks.forEach(function (b) { b.hidden = b.id !== id; });
+      tabs.querySelectorAll("button").forEach(function (t) { t.setAttribute("aria-selected", String(t.dataset.target === id)); });
+      blocks.filter(function (b) { return b.id === id; })[0].querySelectorAll(".reveal").forEach(function (el) { el.classList.add("is-in"); });
+      if (scroll) doc.getElementById("pricing").scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+    };
+    tabs.addEventListener("click", function (e) {
+      var t = e.target.closest("button"); if (!t) return;
+      history.replaceState(null, "", "#" + t.dataset.target); show(t.dataset.target, false);
+    });
+    var fromHash = function (scroll) { var h = location.hash.slice(1); if (names[h]) show(h, scroll); };
+    addEventListener("hashchange", function () { fromHash(true); });
+    show(names[location.hash.slice(1)] ? location.hash.slice(1) : "lms", false);
+    if (names[location.hash.slice(1)]) setTimeout(function () { fromHash(true); }, 60);
+  }
+})();
