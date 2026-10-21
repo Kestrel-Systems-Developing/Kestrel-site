@@ -154,52 +154,23 @@
   }
 })();
 
-/* ---- Creative layer: progress bar, focus spotlight, tilt, tabs, timeline ---- */
+/* ---- Art-direction layer: header, systems index, solutions tabs ---- */
 (function () {
   "use strict";
   var doc = document, reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  var bar = doc.createElement("div"); bar.className = "scroll-bar"; doc.body.appendChild(bar);
   var header = doc.querySelector(".site-header");
-  var onScroll = function () {
-    var h = doc.documentElement.scrollHeight - innerHeight;
-    bar.style.transform = "scaleX(" + (h > 0 ? scrollY / h : 0) + ")";
-    if (header) header.classList.toggle("is-stuck", scrollY > 8);
-  };
-  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  var stick = function () { if (header) header.classList.toggle("is-stuck", scrollY > 8); };
+  addEventListener("scroll", stick, { passive: true }); stick();
 
-  if (!reduce) {
-    var hero = doc.querySelector(".hero");
-    if (hero) hero.addEventListener("pointermove", function (e) {
-      var r = hero.getBoundingClientRect();
-      hero.style.setProperty("--mx", (e.clientX - r.left) + "px");
-      hero.style.setProperty("--my", (e.clientY - r.top) + "px");
+  /* Systems index: one row open at a time; the open row is always visible */
+  var rows = [].slice.call(doc.querySelectorAll(".index .row"));
+  rows.forEach(function (r) {
+    var b = r.querySelector(".row__bar");
+    b.addEventListener("click", function () {
+      rows.forEach(function (x) { x.classList.remove("is-open"); x.querySelector(".row__bar").setAttribute("aria-expanded", "false"); });
+      r.classList.add("is-open"); b.setAttribute("aria-expanded", "true");
     });
-    var mock = doc.querySelector(".hero .mock");
-    if (mock) {
-      mock.parentNode.classList.add("mock-wrap-float");
-      mock.addEventListener("pointermove", function (e) {
-        var r = mock.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
-        mock.style.transform = "rotateY(" + (x * 14) + "deg) rotateX(" + (-y * 10) + "deg)";
-      });
-      mock.addEventListener("pointerleave", function () { mock.style.transform = ""; });
-    }
-    doc.querySelectorAll(".pcard").forEach(function (c) {
-      c.addEventListener("pointermove", function (e) {
-        var r = c.getBoundingClientRect();
-        c.style.setProperty("--px", (e.clientX - r.left) + "px");
-        c.style.setProperty("--py", (e.clientY - r.top) + "px");
-      });
-    });
-  }
-
-  /* Timeline draws when it scrolls into view */
-  var tl = doc.querySelector(".timeline");
-  if (tl && "IntersectionObserver" in window) {
-    new IntersectionObserver(function (en, o) {
-      if (en[0].isIntersecting) { tl.style.setProperty("--draw", 1); o.disconnect(); }
-    }, { threshold: .3 }).observe(tl);
-  } else if (tl) tl.style.setProperty("--draw", 1);
+  });
 
   /* Solutions: one product's plans at a time, deep-linkable (#lms, #qrms, #sms) */
   var blocks = [].slice.call(doc.querySelectorAll(".price-block"));
@@ -222,9 +193,9 @@
       var t = e.target.closest("button"); if (!t) return;
       history.replaceState(null, "", "#" + t.dataset.target); show(t.dataset.target, false);
     });
-    var fromHash = function (scroll) { var h = location.hash.slice(1); if (names[h]) show(h, scroll); };
-    addEventListener("hashchange", function () { fromHash(true); });
-    show(names[location.hash.slice(1)] ? location.hash.slice(1) : "lms", false);
-    if (names[location.hash.slice(1)]) setTimeout(function () { fromHash(true); }, 60);
+    addEventListener("hashchange", function () { var h = location.hash.slice(1); if (names[h]) show(h, true); });
+    var h0 = location.hash.slice(1);
+    show(names[h0] ? h0 : "lms", false);
+    if (names[h0]) setTimeout(function () { show(h0, true); }, 60);
   }
 })();
