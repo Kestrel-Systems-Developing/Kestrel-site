@@ -148,3 +148,105 @@ html:not(.js) .row__panel{grid-template-rows:1fr}
 .card,.form,.faq details{border-radius:2px}
 .pcard{border-top:4px solid var(--navy)}
 .pcard:hover{box-shadow:none}
+
+/* ==========================================================================
+   Mobile & tablet layer. Only max-width queries, so desktop is untouched.
+   ========================================================================== */
+@media (max-width:1000px){
+  .hero--home{min-height:0;padding:48px 0 56px}
+  .hero--home .hero__grid{grid-template-columns:minmax(0,1fr);gap:40px}
+  .dg{margin:0 auto;max-width:460px}
+  .systems__head{grid-template-columns:minmax(0,1fr);gap:16px}
+  .deploy__halves{grid-template-columns:minmax(0,1fr)}
+  .work{grid-template-columns:minmax(0,1fr)}
+  .work__lead{position:static}
+  .cta .wrap{grid-template-columns:minmax(0,1fr);align-items:start}
+  .cta .btn-row{grid-column:1}
+  .index{list-style:none;padding:0;margin:0}
+  .deploy__head .lede{color:var(--silver-2)}
+  .deploy__half--a .num{color:var(--gold)}
+}
+
+@media (max-width:820px){
+  /* comfortable tap targets in the menu */
+  .nav a{padding:16px 0}
+  .nav .btn{padding:1em}
+  .nav-toggle{min-height:44px;min-width:44px}
+  .site-header.is-stuck .bar{height:var(--header-h)}
+}
+
+@media (max-width:620px){
+  :root{--header-h:64px}
+  .wrap{width:min(var(--wrap),100% - 32px)}
+
+  /* buttons: full width, thumb-sized */
+  .btn{min-height:48px}
+  .btn-row{flex-direction:column;gap:12px}
+  .btn-row .btn,.pcard__actions .btn{width:100%}
+  .pcard__actions{flex-direction:column}
+
+  /* home: systems index */
+  .row__bar{grid-template-columns:32px minmax(0,1fr) 44px;gap:4px 12px;padding:20px 0}
+  .row__n{grid-row:1}
+  .row__name{grid-column:2;grid-row:1;font-size:clamp(1.5rem,8vw,2rem)}
+  .row__plus{grid-column:3;grid-row:1}
+  .row__sub{grid-column:2;grid-row:2;text-align:left;font-size:.9rem}
+  .row:not(.is-open):hover .row__name{transform:none}
+  .row__body{grid-template-columns:minmax(0,1fr);padding:4px 0 28px}
+  .row__body>.row__text,.row__body>.row__aside{grid-column:1}
+  .row.is-open .row__bar,.row.is-open .row__body{padding-inline:16px}
+  .row.is-open{margin-inline:-16px}
+  .row__text p{font-size:1rem}
+  .row__aside .pcard__icon{display:none}
+
+  /* home: deployment halves, principles */
+  .deploy__letter{font-size:11rem}
+  .principle{grid-template-columns:32px minmax(0,1fr);gap:8px 12px}
+  .principle h3{font-size:clamp(1.5rem,8vw,2rem)}
+
+  /* CTA + footer */
+  .cta h2{font-size:clamp(1.8rem,9vw,2.4rem)}
+  .site-footer>.wrap::before{font-size:clamp(1.8rem,9vw,2.4rem)}
+  .site-footer li{margin-bottom:0}
+  .site-footer li a{display:inline-block;padding:8px 0}
+  .footer__bottom{flex-direction:column;gap:6px}
+
+  /* solutions: filters + tabs scroll sideways instead of wrapping */
+  .filters{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px}
+  .filters::-webkit-scrollbar,.product-tabs::-webkit-scrollbar{display:none}
+  .filters__label{flex:none}
+  .chip{flex:none;min-height:44px;margin-right:12px;white-space:nowrap}
+  .product-tabs{gap:24px;margin-inline:-16px;padding-inline:16px;scrollbar-width:none}
+  .product-tabs button{min-height:48px}
+  .toggle{display:flex}
+  .toggle button{flex:1;min-height:44px}
+
+  /* plans, cards, FAQ */
+  .plan{padding:32px 20px 24px}
+  .price__amt{font-size:2.2rem}
+  .card,.split .card{padding:22px}
+  .faq details{padding:0 18px}
+  .faq summary{min-height:48px;padding:16px 32px 16px 0}
+
+  /* forms: 16px stops iOS zooming on focus */
+  .field input,.field select,.field textarea{font-size:16px;min-height:48px}
+  .field textarea{min-height:140px}
+  .form{padding:20px}
+  .contact-list a{display:inline-block;padding:4px 0;overflow-wrap:anywhere}
+
+  /* tables keep their scroll but get a hint */
+  .table-wrap{margin-inline:-16px;border-inline:0}
+}
+
+/* very small phones */
+@media (max-width:360px){
+  .hero--home h1{font-size:1.95rem}
+  .row__bar{grid-template-columns:28px minmax(0,1fr) 40px}
+  .row__plus{width:40px;height:40px}
+}
+
+/* touch devices: no sticky hover states */
+@media (hover:none){
+  .btn:hover{transform:none}
+  .table-wrap tbody tr:hover{background:transparent}
+}
